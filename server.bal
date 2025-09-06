@@ -87,6 +87,30 @@ resource function get getAssetFromFaculty/[string faculty](http:Caller caller)re
 }
 
 
+resource function get getDueItems(http:Caller caller)returns error? {
+    time:Seconds reviewCycle = 5*365*24*60*60;
+        io:println("reviewCycle "+reviewCycle.toString());
+    
+    
+    time:Utc currentTime = time:utcNow();
+
+    Asset[] dueItems = [];
+
+    foreach Asset asset in assetTable.toArray() {
+        time:Utc rregistrationTime = check time:utcFromString(asset.dateAquired);
+        time:Seconds elapsedTime = time:utcDiffSeconds(currentTime, dateAquired);
+
+        if elapsedTime>= reviewCycle{
+            io:println("revieCycle has been breached" +elapsedTime.toString());
+            dueItems.push(asset);
+        }  
+            
+        
+    }
+    check caller->respond(dueItems);
+    
+}
+
 
 
 
