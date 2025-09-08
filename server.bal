@@ -1,15 +1,31 @@
 import ballerina/io;
 import ballerina/http;
 import ballerina/time;
-
-type assetComp record {
-string assetComponents;
-string maintenaceSchedules;
-string workOrders;
-string task;
-};
+import ballerina/log;
 
 
+type Component record{
+    string id;
+    string name;
+    string description;
+}
+
+type Schedule record {
+    string id;
+    string frequency;
+    string nextDueDate;
+}
+type Task record {
+    string id;
+    string description;
+    string status;
+}
+type WorkOrders record{
+    string id;
+    string title;
+    string status;
+    Task[]task;
+}
 
 type Asset record{
      readonly string tag;
@@ -18,22 +34,13 @@ type Asset record{
      string department;
      string dateAquired;
      string curent_status;
-     assetComp[] componets;
+     Component[] componets;
+     Schedule[] schedules;
+     WorkOrders[] workOrders;
 };
  
 
-table<Asset>key(tag) assetTable = table[{
-    tag: "01COM",
-    name: "Computer asus i5",
-    faculty: "Computer science",
-    department: "software Engineering",
-    dateAquired: "2025-02-20",
-    curent_status: "ACTIVE",
-    componets: [
-        {assetComponents: "Hardrive, charger,usb ",maintenaceSchedules: "2025-10-01",workOrders: "Active",task: "update AntiVirus"}
-        ]
-}
-];
+table<Asset>key(tag) assetTable = {};
 
 service /asset on new http:Listener(8080){
 
@@ -83,7 +90,14 @@ resource function get getAsset/[string tag](http:Caller caller)returns error? {
 }
 
 resource function get getAssetFromFaculty/[string faculty](http:Caller caller)returns error? {
-    
+    Asset[] filtered=[];
+    foreach var [k,v] in assetTable {
+        if v.faculty.toLowerAscii() == faculty.toLowerAscii(){
+            filtered.push(v);
+        }
+        
+    }
+    check caller->respond(filtered);
 }
 
 
@@ -111,6 +125,61 @@ resource function get getDueItems(http:Caller caller)returns error? {
     
 }
 
+
+resource function put updateAsset/[string tag](http:Caller caller, http:Request req) returns error?{
+
+    json|error reqPayload = req.getJsonPayload();
+
+    if(reqPayload is json){
+        Asset|error updateAsset = reqPayload.cloneWithType(Asset);
+
+    if(updateAsset is Asset){
+
+        Asset? existingAssetOpt = assetTable[tag];
+
+
+        if(existingAssetOpt is Asset){
+
+            Asset existingAsset = existingAssetOpt;
+            existingAsset.name = updateAsset.name;
+            existingAsset.faculty = updateAsset.faculty;
+            existingAsset.department=updateAsset.department;
+            existingAsset.dateAquired = updateAsset.dateAquired;
+            existingAsset.componets = updateAsset.componets;
+            existingAsset.schedules = updateAsset.schedules;
+            existingAsset.workOrders = updateAsset.workOrders;
+
+
+        assetTable.put(existingAsset);
+        log:printInfo("Asset updated Successfully:" + tag);
+
+
+check caller->respond({
+    message:"Asset updated successfully",
+    asset:existingAsset
+});
+
+        }else {
+            log:printError("Asset not found:" + tag);
+            check caller->respond({
+                status:http:STATUS_BAD_REQUEST,
+                message:"Invalid JSON payload"
+            });
+        }else {
+            log:printError("Invalid JSON payload");
+
+            check caller->respond({
+                status: http:STATUS_BAD_REQUEST,
+                message:"Invalid JSON payload"
+            });
+        }
+    }
+
+
+
+
+    }
+}
 
 
 
