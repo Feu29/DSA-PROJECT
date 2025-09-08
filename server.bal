@@ -28,7 +28,7 @@ type WorkOrders record{
 }
 
 type Asset record{
-     readonly string tag;
+     readonly string assetTag;
      string name;
      string faculty;
      string department;
@@ -40,7 +40,7 @@ type Asset record{
 };
  
 
-table<Asset>key(tag) assetTable = {};
+table<Asset>key(assetTag) assetTable = {};
 
 service /asset on new http:Listener(8080){
 
@@ -51,7 +51,7 @@ resource function post addNewAsset(http:Caller caller, http:Request req)returns 
     Asset asset = check payload.fromJsonWithType(Asset);
 
 
-    if assetTable.hasKey(asset.tag){
+    if assetTable.hasKey(asset.asstTag){
         http:Response response = new;
         response.statusCode=409;
         response.setJsonPayload({"message":"Programme with this code already exists!"});
@@ -75,7 +75,7 @@ resource function get allAssets(http:Caller caller )returns error? {
 }
 
 resource function get getAsset/[string tag](http:Caller caller)returns error? {
-    Asset? asset = assetTable[tag];
+    Asset? asset = assetTable[assetTag];
     if asset is Asset{
         check caller->respond(asset);
     }else {
@@ -106,11 +106,11 @@ resource function get getAssetFromFaculty/[string faculty](http:Caller caller)re
 
 
 
-resource function delete Asset/[string tag]()returns http:Response {
+resource function delete Asset/[string aassetTag]()returns http:Response {
     http:Response response = new http:Response();
 
-    if assetTable.hasKey(tag){
-        _=assetTable.remove(tag);
+    if assetTable.hasKey(assetTag){
+        _=assetTable.remove(assetTag);
         response.statusCode = 204;
         response.setPayload("Asset successfully removed");
 
@@ -156,7 +156,7 @@ resource function get getDueItems(http:Caller caller)returns error? {
 }
 
 
-resource function put updateAsset/[string tag](http:Caller caller, http:Request req) returns error?{
+resource function put updateAsset/[string assetTag](http:Caller caller, http:Request req) returns error?{
 
     json|error reqPayload = req.getJsonPayload();
 
@@ -165,7 +165,7 @@ resource function put updateAsset/[string tag](http:Caller caller, http:Request 
 
     if(updateAsset is Asset){
 
-        Asset? existingAssetOpt = assetTable[tag];
+        Asset? existingAssetOpt = assetTable[assetTag];
 
 
         if(existingAssetOpt is Asset){
@@ -181,7 +181,7 @@ resource function put updateAsset/[string tag](http:Caller caller, http:Request 
 
 
         assetTable.put(existingAsset);
-        log:printInfo("Asset updated Successfully:" + tag);
+        log:printInfo("Asset updated Successfully:" + assetTag);
 
 
 check caller->respond({
@@ -217,3 +217,4 @@ check caller->respond({
 
 
 }
+
