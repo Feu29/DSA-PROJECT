@@ -98,7 +98,37 @@ resource function get getAssetFromFaculty/[string faculty](http:Caller caller)re
         
     }
     check caller->respond(filtered);
+
+
+
+
 }
+
+
+
+resource function delete Asset/[string tag]()returns http:Response {
+    http:Response response = new http:Response();
+
+    if assetTable.hasKey(tag){
+        _=assetTable.remove(tag);
+        response.statusCode = 204;
+        response.setPayload("Asset successfully removed");
+
+    }else {
+        response.statusCode = 404;
+        response.setPayload("Asset Not Found");
+    }
+    return response;
+    
+}
+
+
+
+
+
+
+
+
 
 
 resource function get getDueItems(http:Caller caller)returns error? {
