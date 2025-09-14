@@ -154,7 +154,7 @@ service "CarRental" on new grpc:Listener(9090) {
         if currentCart is CartItem[] {
             currentCart.push(item);
         }
-        return {message: "Car added to cart"};
+        return {message: "Car Succesfully added to cart"};
     }
 
     remote function place_reservation(UserId u) returns ReservationResponse {
@@ -178,3 +178,4 @@ service "CarRental" on new grpc:Listener(9090) {
         return {message: "No items in cart", total_price: 0.0};
     }
 }
+
