@@ -9,6 +9,9 @@ Car[] cars = [];
 // Users array
 User[] users = [];
 
+//shopping caarts - plate to user mapping
+map<json> carts = [];
+
 @grpc:Descriptor {value: CAR_DESC}
 service "CarRentalService" on ep {
 
@@ -70,14 +73,66 @@ service "CarRentalService" on ep {
     }
 
     remote function AddToCart(AddToCartRequest value) returns CartResponse|error {
+       boolean carExists = false;
+       foreach var car in cars{
+        if car.plate == value.plate&& car.status =="AVAILABLE"{
+            carExists = true;
+            break;
+        }
+
+       }
+       if !carExists{
+        return {success: false, message: "car not avaible or not found"};
+       }
+       json cartsItem = {
+        plate:value.plate,
+        users:value.username,
+        days:value.end_date
+       };
+       carts.push(cartsItem);
+       
         return {success: true, message: "Car added to cart"};
     }
 
     remote function PlaceReservation(PlaceReservationRequest value) returns ReservationResponse|error {
+       
+       
+       
+       decimal totalPrice = 0.0;
+       boolean carFound = false;
+
+       foreach var car in cars {
+        if car.plate == value.plate{
+            carFound = true;
+            totalPrice = car.daily_price* value.days;
+
+
+            
+            car.status ="RESERVED";
+            break;
+        }
+        
+       }
+       if !carFound{
+         return {success: false, message: "Car not found", total_price: 0.0};
+        }
+       
+
         return {success: true, message: "Reservatioan confirmed", total_price: 0.0};
     }
 
+
     remote function CreateUsers(stream<User, grpc:Error?> clientStream) returns CreateUsersResponse|error {
+       
+       error? e = clientStream.forEach(function (User user) {
+           users.push(user);
+       });
+       
+       
+       if e is error{
+        return error("Error processing user stream: " + e.message());
+       }
+       
         return {success: true, message: "Users created successfully"};
     }
 
