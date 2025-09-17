@@ -20,6 +20,7 @@ service "CarRentalService" on ep {
         return {success: true, message: "Car added successfully", car: value};
     }
 
+ // Update car info by plate number
     remote function UpdateCar(UpdateCarRequest value) returns CarResponse|error {
         foreach var i in 0 ..< cars.length() {
             if cars[i].plate == value.plate {
@@ -31,8 +32,8 @@ service "CarRentalService" on ep {
         return {success: false, message: "Car not found"};
     }
 
-    remote function RemoveCar(RemoveCarRequest value) returns stream<Car, error?>|error {
-        // Remove car by plate
+ // Remove car by plate
+    remote function RemoveCar(RemoveCarRequest value) returns stream<Car, error?>|error {   
         Car[] updatedCars = [];
         boolean found = false;
         foreach var car in cars {
@@ -63,6 +64,7 @@ service "CarRentalService" on ep {
         return carStream;
     }
 
+// Find a car by plate number
     remote function SearchCar(SearchCarRequest value) returns CarResponse|error {
         foreach var car in cars {
             if car.plate == value.plate {
@@ -72,6 +74,7 @@ service "CarRentalService" on ep {
         return {success: false, message: "Car not found"};
     }
 
+// Add a car to the user's cart
     remote function AddToCart(AddToCartRequest value) returns CartResponse|error {
        boolean carExists = false;
        foreach var car in cars{
@@ -94,10 +97,10 @@ service "CarRentalService" on ep {
         return {success: true, message: "Car added to cart"};
     }
 
+
+
+ // Reserve a car and calculate price
     remote function PlaceReservation(PlaceReservationRequest value) returns ReservationResponse|error {
-       
-       
-       
        decimal totalPrice = 0.0;
        boolean carFound = false;
 
@@ -122,6 +125,7 @@ service "CarRentalService" on ep {
     }
 
 
+// Add users from a streaming request
     remote function CreateUsers(stream<User, grpc:Error?> clientStream) returns CreateUsersResponse|error {
        
        error? e = clientStream.forEach(function (User user) {
@@ -136,6 +140,8 @@ service "CarRentalService" on ep {
         return {success: true, message: "Users created successfully"};
     }
 
+
+ // List all users or filter by role
     remote function ListUsers(ListUsersRequest value) returns ListUsersResponse|error {
         if value.role != "" {
             User[] filtered = from var u in users
@@ -146,4 +152,5 @@ service "CarRentalService" on ep {
         return {users: users};
     }
 }
+
 
