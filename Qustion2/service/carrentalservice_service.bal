@@ -1,6 +1,6 @@
 import ballerina/grpc;
 
-// Start gRPC server
+// Start the gRPC server
 listener grpc:Listener ep = new (9090);
 
 // Global in-memory array to store cars
@@ -146,3 +146,4 @@ service "CarRentalService" on ep {
         return {users: users};
     }
 }
+
