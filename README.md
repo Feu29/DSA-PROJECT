@@ -26,6 +26,7 @@ VS Code
 
 Client Menu
 When you run bal run inside the client folder, you get a menu:
+
 === MAIN MENU ===
 1. Add New Asset
 2. View All Assets
