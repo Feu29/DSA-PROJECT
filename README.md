@@ -1,6 +1,6 @@
 # DSA-PROJECT
 
-Question 1 
+QUESTION 1
 
 Asset Management System (REST API)
 This project is a RESTful Asset Management System built using Ballerina.
@@ -8,7 +8,7 @@ It provides an API for managing assets, components, schedules, and work orders,
 along with an interactive CLI client for testing and usage.
 
 
-Features
+FEATURES
 
 Add Asset: Register new assets with components, schedules, and work orders
 
@@ -25,13 +25,15 @@ Delete Asset: Remove an asset from the system
 Due Items (Review): List items that are due for review
 
 
-Prerequisites
+PREREQUISITES 
 Before running the project, ensure you have:
+
 Ballerina
+
 VS Code
 
 
-Client Menu
+CLIENT MENU
 When you run bal run inside the client folder, you get a menu:
 
 === MAIN MENU ===
@@ -44,3 +46,12 @@ When you run bal run inside the client folder, you get a menu:
 7. Delete Asset
 8. Exit
 
+CONTRIBUTORS 
+
+224091034 Lenchiwasijey Mudzengerere
+
+224065092 Siyamba Alfeus
+
+224079921 Mukuve Erastus
+
+224052470 Mutuku Aloys
