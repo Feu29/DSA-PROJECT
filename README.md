@@ -76,7 +76,7 @@ When you run bal run inside the client folder, you get a menu:
 
 * Mukuve Erastus 224079921@nust.na 
 
-* Mutuku Aloys 224052470@nust.com 
+* Mutuku Aloys 224052470@nust.na 
 
 * Nathan Duarte bradleyduarte1998@gmail.com 
 
