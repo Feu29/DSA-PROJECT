@@ -70,15 +70,15 @@ When you run bal run inside the client folder, you get a menu:
 
 ## CONTRIBUTORS 
 
-* 224091034 Lenchiwasijey Mudzengerere 224091034@nust.na 0816753051
+* Lenchiwasijey Mudzengerere 224091034@nust.na 
 
-* 224065092 Siyamba Alfeus alfeusfeu@gmail.com 0812244302
+* Siyamba Alfeus alfeusfeu@gmail.com 
 
-* 224079921 Mukuve Erastus 224079921@nust.na 0813104059
+* Mukuve Erastus 224079921@nust.na 
 
-* 224052470 Mutuku Aloys mutukualoys@gmail.com 0817571307
+* Mutuku Aloys 224052470@nust.com 
 
-* 217090427 Nathan Duarte bradleyduarte1998@gmail.com 0813409693
+* Nathan Duarte bradleyduarte1998@gmail.com 
 
 
 
@@ -202,14 +202,3 @@ NB If you dont know how to use postman!
 You can edit the values (like make, model, username, days) inside car_rental_client.bal to test different scenarios.
 For example, change status to "AVAILABLE" or "UNAVAILABLE"to see how the system behaves.
 
-## CONTRIBUTORS 
-
-* 224091034 Lenchiwasijey Mudzengerere 224091034@nust.na 0816753051
-
-* 224065092 Siyamba Alfeus alfeusfeu@gmail.com 0812244302
-
-* 224079921 Mukuve Erastus 224079921@nust.na 0813104059
-
-* 224052470 Mutuku Aloys mutukualoys@gmail.com 0817571307
-
-* 217090427 Nathan Duarte bradleyduarte1998@gmail.com 0813409693
